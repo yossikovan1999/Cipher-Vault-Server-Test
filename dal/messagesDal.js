@@ -31,7 +31,7 @@ export async function getMessageById(messageId) {
 }
 
 //=====================================
-//        get message by id
+//         getAllUsersMessages
 //=====================================
 
 export async function getAllUsersMessages(useranme){

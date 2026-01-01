@@ -1,6 +1,5 @@
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
-import getAuthMiddleware from "../middleware/getAuthMiddleware.js";
 import * as messageService from "../services/messageService.js";
 import HttpError from "../errors/httpError.js";
 
@@ -8,8 +7,8 @@ const router = express.Router();
 
 router.post("/encrypt", authMiddleware, async (req, res, next) => {
   try {
-    const { username, cipherType, message } = req.body;
-
+    const { cipherType, message } = req.body;
+    const {username} = req.headers;
     //validate all the fields were sent by the user.
     if (!username || !cipherType || !message) {
       throw HttpError("must send username cipherType and message.", 400);
@@ -39,10 +38,15 @@ router.post("/decrypt", authMiddleware, async (req, res, next) => {
   }
 });
 
-router.get("/", getAuthMiddleware, async (req, res, next)=>{
+router.get("/", authMiddleware, async (req, res, next)=>{
 
   try{
-    const {username} = req.query;
+    const {username} = req.headers;
+    
+    if(!username){
+      throw new HttpError("username must be included.");
+    }
+
     const result = await messageService.getAllUsersMessages(username);
     return res.status(200).json({items : result});
   }catch(error){

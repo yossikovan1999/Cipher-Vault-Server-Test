@@ -2,6 +2,8 @@ import express from "express";
 import "dotenv/config";
 import { connectMongo } from "./database/mongoCon.js";
 import errorMiddleware from "./middleware/errorMiddleware.js";
+import apiRoute from "./routes/apiRoute.js";
+
 
 const app = express();
 
@@ -10,6 +12,11 @@ await connectMongo();
 
 app.use(express.json());
 
+app.get("/", (req, res)=>{
+  return res.json({message : "hello"})
+})
+
+app.use("/api", apiRoute);
 
 app.use(errorMiddleware);
 

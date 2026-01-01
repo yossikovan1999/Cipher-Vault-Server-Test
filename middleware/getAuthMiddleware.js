@@ -1,11 +1,9 @@
 import HttpError from "../errors/httpError.js";
 import { getUserByUsername } from "../services/usersService.js";
 
-
-
-async function authMiddleware(req, res, next) {
+async function getAuthMiddleware(req, res, next) {
   try {
-    const { username, password } = req.body;
+    const { username, password } = req.query;
 
     if (!username || !password) {
       throw new HttpError("must include a username and password.", 400);
@@ -27,4 +25,4 @@ async function authMiddleware(req, res, next) {
   }
 }
 
-export default authMiddleware;
+export default getAuthMiddleware;
